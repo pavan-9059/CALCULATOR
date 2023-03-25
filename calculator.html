@@ -1,0 +1,223 @@
+<div id="calculator">
+  <!-- Screen and clear key -->
+  <div class="top">
+    <div class="screen"></div>
+    <span class="clear">C</span>
+    
+  </div>
+
+  <div class="keys">
+    <span>7</span>
+    <span>8</span>
+    <span>9</span>
+    <span class="operator">+</span>
+    <span>4</span>
+    <span>5</span>
+    <span>6</span>
+    <span class="operator">-</span>
+    <span>1</span>
+    <span>2</span>
+    <span>3</span>
+    <span class="operator">÷</span>
+    <span>0</span>
+    <span>.</span>
+    <span class="eval">=</span>
+    <span class="operator">x</span>
+  </div>
+</div>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+
+    
+    font: bold 16px Arial, sans-serif;
+  }
+  html {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(140deg,#ebeb0bcb,#9f07bdb6,#3bf);
+    background-size: cover;
+  }
+
+  #calculator {
+    width: 325px;
+    height: auto;
+
+    margin: 100px auto;
+    padding: 20px 20px 20px;
+
+    background: #0ad150;
+    background: linear-gradient(#e4c00c, #cd07b6);
+    border-radius: 15px;
+    box-shadow: 4px 4px  #1ba3e2, 10px 10px 15px rgba(255, 254, 254, 0.2);
+  }
+  .top span.clear {
+    float: left;
+  }
+  .top .screen {
+    height: 40px;
+    width: 210px;
+
+    float: right;
+
+    padding: 0 10px;
+
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    box-shadow: inset 0px 4px rgba(0, 0, 0, 0.2);
+    font-size: 20px;
+    line-height: 45px;
+    color: rgb(0, 0, 0);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    letter-spacing: 2px;
+  }
+  .keys,
+  .top {
+    overflow: hidden;
+  }
+  .keys span,
+  .top span.clear {
+    float: left;
+    position: relative;
+    top: 0;
+
+    cursor: pointer;
+
+    width: 66px;
+    height: 36px;
+    background: rgb(16, 215, 199);
+    border-radius: 10px;
+    box-shadow: 0px 4px rgba(0, 187, 255, 0.2);
+
+    margin: 10px 7px 20px 0;
+
+    color: #001eff;
+    line-height: 36px;
+    text-align: center;
+
+  
+    user-select: none;
+
+   
+    transition: all 0.2s ease;
+  }
+
+  
+  .keys span.operator {
+    background: #ffffff;
+    color: red;
+    margin-right: 0;
+  }
+
+  .keys span.eval {
+    background: #f1ff92;
+    box-shadow: 0px 4px #9da853;
+    color: #fa0000;
+  }
+
+  .top span.clear {
+    background: #ff9fa8;
+    box-shadow: 0px 4px #ff7c87;
+    color: white;
+  }
+  .keys span:hover {
+    background: #f3f2f8;
+    box-shadow: 4px 4px #5407ef;
+    color: rgb(255, 0, 0);
+  }
+
+  .keys span.eval:hover {
+    background: #ff2f00;
+    box-shadow: 0px 4px #e8e6e6;
+    color: #f5f4f4;
+  }
+
+  .top span.clear:hover {
+    background: #ffffff;
+    box-shadow: 0px 4px #f30010;
+    color: rgb(240, 4, 4);
+  }
+  .keys span:active {
+    box-shadow: 0px 0px #6b54d3;
+    top: 4px;
+  }
+
+  .keys span.eval:active {
+    box-shadow: 0px 0px #717a33;
+    top: 4px;
+  }
+
+  .top span.clear:active {
+    top: 4px;
+    box-shadow: 0px 0px #d3545d;
+  }
+</style>
+
+<script>
+  var keys = document.querySelectorAll("#calculator span");
+  var operators = ["+", "-", "x", "÷"];
+  var decimalAdded = false;
+
+
+  for (var i = 0; i < keys.length; i++) {
+    keys[i].onclick = function (e) {
+      
+      var input = document.querySelector(".screen");
+      var inputVal = input.innerHTML;
+      var btnVal = this.innerHTML;
+
+      
+      if (btnVal == "C") {
+        input.innerHTML = "";
+        decimalAdded = false;
+      }
+
+      else if (btnVal == "=") {
+        var equation = inputVal;
+        var lastChar = equation[equation.length - 1];
+
+        
+        equation = equation.replace(/x/g, "*").replace(/÷/g, "/");
+        if (operators.indexOf(lastChar) > -1 || lastChar == ".")
+          equation = equation.replace(/.$/, "");
+
+        if (equation) input.innerHTML = eval(equation);
+
+        decimalAdded = false;
+      }
+
+      else if (operators.indexOf(btnVal) > -1) {
+
+        var lastChar = inputVal[inputVal.length - 1];
+        if (inputVal != "" && operators.indexOf(lastChar) == -1)
+          input.innerHTML += btnVal;
+    
+        else if (inputVal == "" && btnVal == "-") input.innerHTML += btnVal;
+
+       
+        if (operators.indexOf(lastChar) > -1 && inputVal.length > 1) {
+         
+          input.innerHTML = inputVal.replace(/.$/, btnVal);
+        }
+
+        decimalAdded = false;
+      }
+
+      
+      else if (btnVal == ".") {
+        if (!decimalAdded) {
+          input.innerHTML += btnVal;
+          decimalAdded = true;
+        }
+      }
+      else {
+        input.innerHTML += btnVal;
+      }
+      e.preventDefault();
+    };
+  }
+</script>
